@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int findDet(int n, vector<vector<int>>&a){
+    /*if(n==2){
+        return a[0][0]*a[1][1] - a[0][1]*a[1][0];
+    }*/
+    if(n==1)return a[0][0];
+    
+    int det {0};
+    for(int k=0;k<n;k++){
+        vector<vector<int>>arr;
+        for(int i=0;i<n;i++){
+            if(i==0)continue;
+            arr.push_back({});
+            for(int j=0;j<n;j++){
+                if(j==k)continue;
+                arr.back().push_back(a[i][j]);
+            }
+        }
+        int c = (k%2==0)? 1:-1;
+        c = 1-k%2*2;
+        det+=c*a[0][k]*findDet(n-1,arr);
+    }
+
+    
+    return det;
+}
+
+
+int main()
+{
+    int n;
+    cin>>n;
+    vector<vector<int>>a(n,vector<int>(n));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>a[i][j];
+        }
+    }
+    
+    vector<int>fr(n);
+    for(int i=0;i<n;i++){
+        cin>>fr[i];
+    }
+    
+    int det = findDet(n,a);
+    cout<<det<<"\n";
+    vector<int>dets(n);
+    for(int i=0;i<n;i++){
+        vector<vector<int>>tmp(n,vector<int>(n));
+        for(int j=0;j<n;j++){
+            for(int k=0;k<n;k++){
+                if(k==i)tmp[j][k]=fr[k];
+                else tmp[j][k]=a[j][k];
+            }
+        }
+        dets[i]=findDet(n,tmp);
+    }
+    
+    for(auto i:dets){
+        cout<<det<<"/"<<i<<" ";
+    }
+    
+}
